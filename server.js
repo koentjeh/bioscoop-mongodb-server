@@ -12,6 +12,9 @@ var roomroutes_v1 = require('./api/rooms.routes.v1');
 // var auth_routes_v1 = require('./api/authentication.routes.v1');
 var config = require('./config/env/env');
 // var expressJWT = require('express-jwt');
+var path = require('path');
+var neo4j = require('neo4j-driver').v1;
+
 
 var app = express();
 
@@ -73,6 +76,80 @@ app.use(function (req, res, next) {
 app.use('/api/v1', movieroutes_v1);
 app.use('/api/v1', actorroutes_v1);
 app.use('/api/v1', roomroutes_v1);
+
+
+
+
+
+
+
+
+
+
+// // View Engine
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'ejs');
+
+// app.use(logger('dev'));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(express.static(path.join(__dirname, 'public')));
+
+// const driver = neo4j.driver('bolt://localhost', neo4j.auth.basic('neo4j', 'password'));
+
+// driver.onCompleted = () => {
+//     console.log('Driver created');
+// };
+
+// driver.onError = error => {
+//   console.log(error);
+// };
+
+// const session = driver.session();
+
+// app.get('/', function(req, res) {
+
+//     session
+//         .run('MATCH (tom:Person {name: "Tom Hanks"})-[:ACTED_IN]->(tomHanksMovies) RETURN tom,tomHanksMovies')
+//         .then(result => {
+//             session.close();
+//             driver.close();
+
+//             return result;
+//         })
+//         .catch(error => {
+//             console.log(error);
+//         });
+// });
+
+// app.get('/:name', function(req, res) {
+
+    
+
+
+//     document.write(req);
+
+//     console.log(req.params);
+
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Errorhandler voor express-jwt errors
 // Wordt uitgevoerd wanneer err != null; anders door naar next().
