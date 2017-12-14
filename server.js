@@ -56,7 +56,7 @@ app.use(logger('dev'));
 // CORS headers
 app.use(function (req, res, next) {
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', process.env.ALLOW_ORIGIN || 'http://localhost:4200');
+    res.setHeader('Access-Control-Allow-Origin', process.env.ALLOW_ORIGIN || 'https://bioscoopapp-client.herokuapp.com/admin/movies');
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     // Request headers you wish to allow
