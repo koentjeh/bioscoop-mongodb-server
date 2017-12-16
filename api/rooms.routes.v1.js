@@ -102,11 +102,9 @@ routes.post('/rooms', function(req, res){
   
   let session = neo4jdb.session();
 
-  req.body;
-
   // object -> string in movieIds array
-  req.body.castIds.forEach((item, index) => {
-    req.body.castIds[index] = item['actor_id'];
+  req.body.movieIds.forEach((item, index) => {
+    req.body.movieIds[index] = item['movie_id'];
   });
 
   const room = new Room({
@@ -129,7 +127,8 @@ routes.post('/rooms', function(req, res){
       session
         .run(query, {
           room_id: new_room._id.toString(),
-          room: req.body.room
+          room: req.body.room,
+          movieIds: req.body.movieIds
         })
         .then((result) => {
           res.status(200).json(result);
