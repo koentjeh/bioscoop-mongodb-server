@@ -246,7 +246,7 @@ routes.delete('/movies/:id', function (req, res) {
   session
     .run(query, {movie_id: req.params.id})
     .then((result) => {
-      ActorMongo.findByIdAndRemove(req.params.id)
+      MovieMongo.findByIdAndRemove(req.params.id)
         .then((movie) => {
           res.status(200).json('remove ok');
         }).catch((error) => {
