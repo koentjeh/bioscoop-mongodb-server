@@ -6,8 +6,8 @@ var routes = express.Router();
 var neo4jdb = require('../config/neo4j.db');
 var mongodb = require('../config/mongo.db');
 
-var Room = require('../model/neo4jmovie.model');
-var RoomMongo = require('../model/movie.model');
+var Room = require('../model/neo4jroom.model');
+var RoomMongo = require('../model/room.model');
 
 //
 // Retourneer een lijst met alle zalen.
@@ -33,7 +33,11 @@ routes.get('/rooms', function(req, res) {
 
       RoomMongo
         .find({})
-        .then((result) => {
+        .then((mongoResult) => {
+
+          for (let room of mongoResult) {
+            mongoRooms[room._id] = room;
+          }
 
           result.records.forEach((records) => {
             let record = records._fields[0].properties;
