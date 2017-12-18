@@ -41,7 +41,7 @@ routes.get('/rooms', function(req, res) {
 
           result.records.forEach((records) => {
             let record = records._fields[0].properties;
-            rooms.push(new Room(record['room_id'], record['room'], mongoMovies[record['room_id']]));
+            rooms.push(new Room(record['room_id'], record['roomNumber'], mongoRooms[record['room_id']]));
           });
 
           res.status(200).json(rooms);
@@ -107,15 +107,15 @@ routes.post('/rooms', function(req, res){
     req.body.movieIds[index] = item['movie_id'];
   });
 
-  const room = new Room({
-    seats: body.seats
+  const room = new RoomMongo({
+    seats: req.body.seats
   });
 
   room
     .save()
     .then((new_room) => {
       let query = `
-        CREATE (r:Room { room_id: {room_id}, room: {room}})
+        CREATE (r:Room { room_id: {room_id}, roomNumber: {roomNumber}})
         WITH r
         OPTIONAL
           MATCH (m:Movie)
@@ -127,7 +127,7 @@ routes.post('/rooms', function(req, res){
       session
         .run(query, {
           room_id: new_room._id.toString(),
-          room: req.body.room,
+          roomNumber: req.body.roomNumber,
           movieIds: req.body.movieIds
         })
         .then((result) => {
@@ -170,11 +170,11 @@ routes.put('/rooms/:id', function (req, res) {
       DELETE r
     WITH n,r
     OPTIONAL
-      MATCH (m:Movie)
-      WHERE m.movie_id IN $movieIds
-      CREATE UNIQUE (m)-[e:AVAILABLE_IN]->(r)
-    RETURN r
-  `;
+        MATCH (m:Movie)
+        WHERE m.movie_id IN $movieIds
+        CREATE UNIQUE (m)-[e:AVAILABLE_IN]->(r)
+      RETURN r
+    `;
 
   session
     .run(query, {
@@ -212,7 +212,7 @@ routes.put('/rooms/:id', function (req, res) {
 // Verwijder een bestaande zaal.
 // Vorm van de URL: DELETE http://hostname:3000/api/v1/rooms/23
 //
-routes.delete('/movies/:id', function (req, res) {
+routes.delete('/rooms/:id', function (req, res) {
   res.contentType('application/json');
   
   let session = neo4jdb.session();

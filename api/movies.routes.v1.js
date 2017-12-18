@@ -155,10 +155,10 @@ routes.post('/movies', function(req, res){
           res.status(400).json(error);
         });
 
-      }).catch((error) => {
-        console.log(error);
-        res.status(400).json(error);
-      });
+    }).catch((error) => {
+      console.log(error);
+      res.status(400).json(error);
+    });
 });
 
 //
@@ -183,7 +183,7 @@ routes.put('/movies/:id', function (req, res) {
       SET n.title = $title, n.tagline = $tagline
     WITH n
     OPTIONAL
-      MATCH (a:Actor)-[r:ACTED_IN]->(n:Movie {movie_id: $movie_id}) delete r;
+      MATCH (a:Actor)-[r:ACTED_IN]->(n:Movie {movie_id: $movie_id})
       DELETE r
     WITH n,r
     OPTIONAL

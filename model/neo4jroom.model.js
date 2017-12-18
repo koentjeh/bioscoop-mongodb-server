@@ -1,13 +1,12 @@
 class Room {
 
-    constructor(_id, room, document){
+    constructor(_id, roomNumber, document){
         this._id = _id;
-        this.room = room;
+        this.roomNumber = roomNumber;
 
         if (document) {
-	        this.seats = seats;
+	        this.seats = document.seats;
         }
-	        
     }
 }
 

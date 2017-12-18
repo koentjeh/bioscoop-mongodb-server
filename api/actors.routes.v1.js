@@ -42,11 +42,7 @@ routes.get('/actors', function(req, res) {
           });
 
           res.status(200).json(actors);
-        })
-    })
-    .catch((error) => {
-        res.status(400).json(error);
-        session.close();
+        });
     });
 });
 
@@ -76,10 +72,6 @@ routes.get('/actors/:actor_id', function(req, res){
           actorEl = new Actor(record['actor_id'], record['name'], actor);
           res.status(200).json(actorEl);
         });
-    })
-    .catch((error) => {
-        res.status(400).json(error);
-        session.close();
     });
 });
 
@@ -109,47 +101,19 @@ routes.post('/actors', function(req, res){
         CREATE (a:Actor { actor_id: {actor_id}, name: {name} })
       `;
 
-
-      // relationship movie -> actor (castmember)
-      // MATCH (n:Movie {movie_id: '5a3161c8b9a76034804a2c9f'}),(d:Actor {actor_id: '5a316207b9a76034804a2ca0'}) CREATE(n)-[r:ACTED_IN]->(d) RETURN r,n,d
-
-
-// MATCH (m:Movie), (a:Actor)
-// WITH COLLECT(DISTINCT m) AS n1, COLLECT(DISTINCT a) AS n2
-// WHERE LENGTH(n1) = LENGTH(n2)
-// FOREACH (i IN RANGE(0, LENGTH(n1) - 1) |
-//   FOREACH (node IN [n1[i]] |
-//     FOREACH (othernode IN [n2[i]] |
-//       MERGE (node)-[:ACTED_IN]-(othernode)
-//     )
-//   )
-// )
-
-// WITH [{name: "Event 1", timetree: {day: 1, month: 1, year: 2014}}, 
-//       {name: "Event 2", timetree: {day: 2, month: 1, year: 2014}}] AS events
-// UNWIND events AS event
-// CREATE (e:Event {name: event.name})
-// WITH e, event.timetree AS timetree
-// MATCH (year:Year {year: timetree.year }), 
-//       (year)-[:HAS_MONTH]->(month {month: timetree.month }),
-//       (month)-[:HAS_DAY]->(day {day: timetree.day })
-// CREATE (e)-[:HAPPENED_ON]->(day)
-
-
-
-
       session
         .run(query, {
           actor_id: new_actor._id.toString(),
           name: actor.name
         })
         .then((result) => {
-          res.status(200).json(new_actor);
-
           session.close();
+          res.status(200).json(actor);
         }).catch((error) => {
           res.status(400).json(error);
         });
+      }).catch((error) => {
+        res.status(400).json(error);
       });
 });
 
@@ -177,6 +141,7 @@ routes.put('/actors/:id', function (req, res) {
       const actor = ActorMongo
         .findById(record['actor_id'])
         .then((actor) => {
+
           const body = req.body;
 
           actor.bio = body.bio;
@@ -186,11 +151,13 @@ routes.put('/actors/:id', function (req, res) {
 
           actor.save()
             .then((actor) => {
-              res.send(actor)
+              res.status(200).json(actor);
             }).catch((error) => {
               res.status(400).json(error);
-            })
+            });
         });
+    }).catch((error) => {
+      res.status(400).json(error);
     });
 });
 
